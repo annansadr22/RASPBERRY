@@ -26,8 +26,12 @@ try:
         sensor_value = GPIO.input(SENSOR_PIN)
         if sensor_value == GPIO.LOW:
             print("Obstacle detected")
-            # Move servo to 90 degrees
-            move_servo(90)
+            # Move servo from 0 to 180 degrees
+            for angle in range(0, 181, 45):
+                move_servo(angle)
+            # Move servo from 180 to 0 degrees
+            for angle in range(180, -1, -45):
+                move_servo(angle)
         else:
             print("No obstacle")
             # Move servo to 0 degrees
