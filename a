@@ -1,0 +1,20 @@
+import RPi.GPIO as GPIO
+import time
+
+# Set up GPIO
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(17, GPIO.IN)
+
+try:
+    while True:
+        sensor_value = GPIO.input(17)
+        if sensor_value == GPIO.LOW:
+            print("Obstacle detected")
+        else:
+            print("No obstacle")
+        time.sleep(0.1)
+except KeyboardInterrupt:
+    print("Exiting program")
+
+# Clean up GPIO
+GPIO.cleanup()
