@@ -16,7 +16,11 @@ def angle_to_duty_cycle(angle):
     return 2.5 + (angle / 18.0)
 
 # Start PWM
-pwm.start(angle_to_duty_cycle(0))  # Initialize servo at 0 degree position
+pwm.start(0)  # Start PWM with 0% duty cycle
+
+# Move to 0 degree position initially
+pwm.ChangeDutyCycle(angle_to_duty_cycle(0))
+time.sleep(1)  # Give time to move to initial position
 
 try:
     while True:
