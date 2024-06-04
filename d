@@ -20,16 +20,18 @@ pwm.start(angle_to_duty_cycle(0))  # Initialize servo at 0 degree position
 
 try:
     while True:
-        for angle in range(0, 181):  # Rotate from 0 to 180 degrees
+        # Rotate from 0 to 9 degrees
+        for angle in range(0, 10):  # 0 to 9 degrees
             duty_cycle = angle_to_duty_cycle(angle)
             pwm.ChangeDutyCycle(duty_cycle)
-            print(f"Rotated to {angle} degrees")  # Print the current angle
+            print("Rotated to", angle, "degrees")  # Print the current angle
             time.sleep(1)  # Wait for 1 second
 
-        for angle in range(180, -1, -1):  # Rotate from 180 to 0 degrees
+        # Rotate back from 9 to 0 degrees
+        for angle in range(9, -1, -1):  # 9 to 0 degrees
             duty_cycle = angle_to_duty_cycle(angle)
             pwm.ChangeDutyCycle(duty_cycle)
-            print(f"Rotated to {angle} degrees")  # Print the current angle
+            print("Rotated to", angle, "degrees")  # Print the current angle
             time.sleep(1)  # Wait for 1 second
 
 except KeyboardInterrupt:
