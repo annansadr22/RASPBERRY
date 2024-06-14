@@ -6,7 +6,7 @@ GPIO.setmode(GPIO.BCM)
 
 # Set GPIO pins for the servos
 servo_pin1 = 17
-servo_pin2 = 27
+servo_pin2 = 19
 servo_pin3 = 22
 
 # Set PWM parameters
