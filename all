@@ -1,0 +1,118 @@
+import RPi.GPIO as GPIO
+import time
+
+# Set GPIO numbering mode
+GPIO.setmode(GPIO.BCM)
+
+# Set GPIO pins for the servos
+servo_pin1 = 17
+servo_pin2 = 19
+servo_pin3 = 22
+sensor_pin = 23  # Pin for the sensor
+
+# Set PWM parameters
+GPIO.setup(servo_pin1, GPIO.OUT)
+GPIO.setup(servo_pin2, GPIO.OUT)
+GPIO.setup(servo_pin3, GPIO.OUT)
+GPIO.setup(sensor_pin, GPIO.IN)  # Setup sensor pin as input
+
+pwm1 = GPIO.PWM(servo_pin1, 50)  # 50 Hz (20 ms period) for first servo
+pwm2 = GPIO.PWM(servo_pin2, 50)  # 50 Hz (20 ms period) for second servo
+pwm3 = GPIO.PWM(servo_pin3, 50)  # 50 Hz (20 ms period) for third servo
+
+# Function to convert angle to duty cycle
+def angle_to_duty_cycle(angle):
+    return 2.5 + (angle / 18.0)
+
+# Start PWM
+pwm1.start(0)  # Start PWM with 0% duty cycle for first servo
+pwm2.start(0)  # Start PWM with 0% duty cycle for second servo
+pwm3.start(0)  # Start PWM with 0% duty cycle for third servo
+
+# Move all servos to 0 degree position initially
+pwm1.ChangeDutyCycle(angle_to_duty_cycle(0))
+pwm2.ChangeDutyCycle(angle_to_duty_cycle(0))
+pwm3.ChangeDutyCycle(angle_to_duty_cycle(0))
+time.sleep(1)  # Give time to move to initial position
+
+try:
+    # Initial rotation of Servo 3
+    for angle in range(0, 91, 10):  # 0 to 90 degrees
+        duty_cycle = angle_to_duty_cycle(angle)
+        pwm3.ChangeDutyCycle(duty_cycle)
+        print("Servo 3 rotated to", angle, "degrees")  # Print the current angle for third servo
+        time.sleep(2)  # Wait for 2 seconds
+
+        # Check sensor
+        sensor_value = GPIO.input(sensor_pin)
+        if sensor_value == GPIO.LOW:
+            print("Obstacle detected, stopping Servo 3 at", angle, "degrees")
+            servo3_stop_angle = angle  # Store the position where Servo 3 stopped
+            break
+    else:
+        servo3_stop_angle = 90  # If no obstacle detected, Servo 3 stops at 90 degrees
+
+    time.sleep(5)
+
+    # Second servo rotates from 0 to 10 degrees
+    for angle in range(0, 10, 1):  # 0 to 10 degrees
+        duty_cycle = angle_to_duty_cycle(angle)
+        pwm2.ChangeDutyCycle(duty_cycle)
+        print("Servo 2 rotated to", angle, "degrees")  # Print the current angle for second servo
+        time.sleep(0.1)  # Wait for 0.1 second
+
+    time.sleep(5)
+    
+    # First servo rotates from 0 to 35 degrees
+    for angle in range(0, 35, 2):  # 0 to 35 degrees
+        duty_cycle = angle_to_duty_cycle(angle)
+        pwm1.ChangeDutyCycle(duty_cycle)
+        print("Servo 1 rotated to", angle, "degrees")  # Print the current angle for first servo
+        time.sleep(0.1)  # Wait for 0.1 second
+
+    time.sleep(5)
+
+    # Second servo rotates back from 9 to 0 degrees
+    for angle in range(9, -1, -1):  # 9 to 0 degrees
+        duty_cycle = angle_to_duty_cycle(angle)
+        pwm2.ChangeDutyCycle(duty_cycle)
+        print("Servo 2 rotated to", angle, "degrees")  # Print the current angle for second servo
+        time.sleep(0.1)  # Wait for 0.1 second
+
+    time.sleep(5)
+
+    # First servo rotates back from 35 to 0 degrees
+    for angle in range(34, -1, -2):  # 34 to 0 degrees
+        duty_cycle = angle_to_duty_cycle(angle)
+        pwm1.ChangeDutyCycle(duty_cycle)
+        print("Servo 1 rotated to", angle, "degrees")  # Print the current angle for first servo
+        time.sleep(0.1)  # Wait for 0.1 second
+
+    time.sleep(5)
+
+    # Third servo resumes rotation from the stop position to 90 degrees
+    for angle in range(servo3_stop_angle, 91, 10):  # From stop position to 90 degrees
+        duty_cycle = angle_to_duty_cycle(angle)
+        pwm3.ChangeDutyCycle(duty_cycle)
+        print("Servo 3 resumed and rotated to", angle, "degrees")  # Print the current angle for third servo
+        time.sleep(0.1)  # Wait for 0.1 second
+
+    time.sleep(1)
+
+    # Third servo rotates back from 90 to 0 degrees at the end
+    for angle in range(90, -1, -10):  # 90 to 0 degrees
+        duty_cycle = angle_to_duty_cycle(angle)
+        pwm3.ChangeDutyCycle(duty_cycle)
+        print("Servo 3 rotated back to", angle, "degrees")  # Print the current angle for third servo
+        time.sleep(0.1)  # Wait for 0.1 second
+
+    time.sleep(1)
+
+except KeyboardInterrupt:
+    pass
+
+# Cleanup
+pwm1.stop()
+pwm2.stop()
+pwm3.stop()
+GPIO.cleanup()
