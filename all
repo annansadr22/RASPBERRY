@@ -8,7 +8,7 @@ GPIO.setmode(GPIO.BCM)
 servo_pin1 = 17
 servo_pin2 = 19
 servo_pin3 = 22
-sensor_pin = 23  # Pin for the sensor
+sensor_pin = 6  # Pin for the sensor
 
 # Set PWM parameters
 GPIO.setup(servo_pin1, GPIO.OUT)
