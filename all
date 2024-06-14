@@ -97,16 +97,48 @@ try:
         print("Servo 3 resumed and rotated to", angle, "degrees")  # Print the current angle for third servo
         time.sleep(0.1)  # Wait for 0.1 second
 
-    time.sleep(1)
+    time.sleep(5)
 
-    # Third servo rotates back from 90 to 0 degrees at the end
-    for angle in range(90, -1, -10):  # 90 to 0 degrees
+    
+
+     # First servo rotates from 0 to 35 degrees
+    for angle in range(0, 35, 2):  # 0 to 35 degrees
         duty_cycle = angle_to_duty_cycle(angle)
-        pwm3.ChangeDutyCycle(duty_cycle)
-        print("Servo 3 rotated back to", angle, "degrees")  # Print the current angle for third servo
+        pwm1.ChangeDutyCycle(duty_cycle)
+        print("Servo 1 rotated to", angle, "degrees")  # Print the current angle for first servo
         time.sleep(0.1)  # Wait for 0.1 second
 
-    time.sleep(1)
+    time.sleep(5)
+
+    # Second servo rotates from 0 to 10 degrees
+    for angle in range(0, 10, 1):  # 0 to 10 degrees
+        duty_cycle = angle_to_duty_cycle(angle)
+        pwm2.ChangeDutyCycle(duty_cycle)
+        print("Servo 2 rotated to", angle, "degrees")  # Print the current angle for second servo
+        time.sleep(0.1)  # Wait for 0.1 second
+
+    time.sleep(5)
+
+    # First servo rotates back from 35 to 0 degrees
+    for angle in range(34, -1, -2):  # 34 to 0 degrees
+        duty_cycle = angle_to_duty_cycle(angle)
+        pwm1.ChangeDutyCycle(duty_cycle)
+        print("Servo 1 rotated to", angle, "degrees")  # Print the current angle for first servo
+        time.sleep(0.1)  # Wait for 0.1 second
+
+    time.sleep(5)
+
+
+    # Second servo rotates back from 9 to 0 degrees
+    for angle in range(9, -1, -1):  # 9 to 0 degrees
+        duty_cycle = angle_to_duty_cycle(angle)
+        pwm2.ChangeDutyCycle(duty_cycle)
+        print("Servo 2 rotated to", angle, "degrees")  # Print the current angle for second servo
+        time.sleep(0.1)  # Wait for 0.1 second
+
+    time.sleep(5)
+
+    
 
 except KeyboardInterrupt:
     pass
