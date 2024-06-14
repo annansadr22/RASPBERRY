@@ -29,6 +29,17 @@ pwm2.ChangeDutyCycle(angle_to_duty_cycle(0))
 time.sleep(1)  # Give time to move to initial position
 
 try:
+
+
+    # Second servo rotates from 0 to 180 degrees
+    for angle in range(0, 10, 1):  # 0 to 180 degrees
+        duty_cycle = angle_to_duty_cycle(angle)
+        pwm2.ChangeDutyCycle(duty_cycle)
+        print("Servo 2 rotated to", angle, "degrees")  # Print the current angle for second servo
+        time.sleep(0.1)  # Wait for 0.1 second
+
+    time.sleep(5)
+    
     # First servo rotates from 0 to 9 degrees
     for angle in range(0, 35, 2):  # 0 to 9 degrees
         duty_cycle = angle_to_duty_cycle(angle)
@@ -39,15 +50,6 @@ try:
         
     t.sleep(5)
 
-    
-    # Second servo rotates from 0 to 180 degrees
-    for angle in range(0, 10, 1):  # 0 to 180 degrees
-        duty_cycle = angle_to_duty_cycle(angle)
-        pwm2.ChangeDutyCycle(duty_cycle)
-        print("Servo 2 rotated to", angle, "degrees")  # Print the current angle for second servo
-        time.sleep(0.1)  # Wait for 0.1 second
-        
-    t.sleep(5)
 
  
     for angle in range(9, -1, -1):  # 0 to 180 degrees
